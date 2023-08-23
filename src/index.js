@@ -1,18 +1,18 @@
 import './css/styles.css';
 import { fetchCountries } from './fetchCountries.js';
 import { Notify } from 'notiflix/build/notiflix-notify-aio';
-import { debounce } from 'lodash.debounce';
+// import { debounce } from 'lodash.debounce';
 
-const DEBOUNCE_DELAY = 3000;
+// const DEBOUNCE_DELAY = 3000;
 const inputCountrySearch = document.querySelector('input#search-box');
 const countryList = document.querySelector('.country-list');
 const countryInfo = document.querySelector('.country-info');
 
 const countryInput = (request => {
     request.preventDefault()
-    const country = request.currentTarget.value;
+    const country = request.currentTarget.value.trim().toLowerCase();
     if (!country) {
-        return console.log('Введіть назву країни для пошуку');
+       return console.log('Введіть назву країни для пошуку')
     }
     const countrys = fetchCountries(country);
     countrys.then(data => {
@@ -23,7 +23,7 @@ const countryInput = (request => {
         .catch(() => Notify.failure('Oops, there is no country with that name'))
 })
 
-inputCountrySearch.addEventListener('input', debounce(countryInput, DEBOUNCE_DELAY))
+inputCountrySearch.addEventListener('input', countryInput);
 
 function creatMarkUp(response) {
     const number = response.length - 1;
@@ -41,7 +41,6 @@ function creatMarkUp(response) {
 }
 
 function renderCountryList({ flag, name }) {
-    console.log(flag, name);
     return `<li style="list-style-type: none; display: flex; align-items: center;">
     <img src="${flag}" width=25px; style="margin-right: 20px">
     <h4>${name}</h4>
